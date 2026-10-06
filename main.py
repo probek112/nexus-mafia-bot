@@ -1289,6 +1289,13 @@ async def cmd_my_role(message: types.Message) -> None:
         )
     await message.answer("\n".join(lines))
 
+def get_roles_text() -> str:
+    lines = ["🎭 O'yin rollari (Jami 40 ta):\n"]
+    for key, data in ROLES.items():
+        name = data.get("name", key)
+        desc = data.get("description", "")
+        lines.append(f"• {name} — {desc}")
+    return "\n".join(lines)
 
 @dp.message(Command("roles"))
 async def cmd_roles(message: types.Message):
