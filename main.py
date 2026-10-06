@@ -1242,6 +1242,21 @@ async def cmd_gifts(message: types.Message) -> None:
         + "\n".join(upcoming)
     )
 
+def get_roles_text() -> str:
+    lines = ["🎭 O'yin rollari:\n"]
+    if isinstance(ROLES, dict):
+        for key, value in ROLES.items():
+            if isinstance(value, dict):
+                role_name = value.get("name", key)
+                role_desc = value.get("description", "Tavsif yo'q")
+            else:
+                role_name = key
+                role_desc = str(value)
+            lines.append(f"• {role_name} — {role_desc}")
+    elif isinstance(ROLES, list):
+        for item in ROLES:
+            lines.append(f"• {item}")
+    return "\n".join(lines)
 
 @dp.message(Command("my_role"))
 async def cmd_my_role(message: types.Message) -> None:
