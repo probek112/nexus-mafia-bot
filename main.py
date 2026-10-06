@@ -1292,12 +1292,17 @@ async def cmd_my_role(message: types.Message) -> None:
 
 @dp.message(Command("roles"))
 async def cmd_roles(message: types.Message):
-    full_text = get_roles_text()
-    if len(full_text) > 4000:
-        for i in range(0, len(full_text), 4000):
-            await message.answer(full_text[i:i+4000], parse_mode="HTML")
-    else:
-        await message.answer(full_text, parse_mode="HTML")
+    try:
+        full_text = get_roles_text()
+        # Matn juda uzun bo'lsa, Telegram chekloviga ko'ra bo'lib yuboramiz
+        if len(full_text) > 4000:
+            for i in range(0, len(full_text), 4000):
+                await message.answer(full_text[i:i+4000])
+        else:
+            await message.answer(full_text)
+    except Exception as e:
+        await message.answer(f"Xatolik yuz berdi: {e}")
+
 
 
 
