@@ -2594,3 +2594,233 @@ async def join_game_callback(callback: CallbackQuery):
 
     # O'yinchiga ro'yxatdan o'tgani haqida bildirishnoma chiqarish
     await callback.answer(f"✅ {user_name}, siz ro'yxatdan o'tdingiz!", show_alert=True)
+# roles.py - Nexus Mafia boti uchun 40 ta rol va ularning tavsiflari
+
+ROLES = {
+    # 🔴 MAFIYA VA YOMONLAR JAMOASI
+    "mafia_boss": {
+        "name": "🔪 Mafiya Bossi (Don)",
+        "team": "mafia",
+        "description": "Mafiya yetakchisi. Tunda otish qarorini beradi va Komissar tekshirganda 'Tinch aholi' bo'lib ko'rinadi."
+    },
+    "mafia": {
+        "name": "🔪 Mafiya",
+        "team": "mafia",
+        "description": "Boss yo'qligida nishonni otadi va tungi ovoz berishda qatnashadi."
+    },
+    "lady": {
+        "name": "💃 Tungi xonim",
+        "team": "mafia",
+        "description": "Har kecha bir o'yinchini tanlaydi va uning tungi qobiliyatini muzlatib qo'yadi."
+    },
+    "killer_mafia": {
+        "name": "🔫 Snayper",
+        "team": "mafia",
+        "description": "Ma'lum bir o'qlari soniga ega bo'lib, xohlagan tunida istalgan o'yinchini o'ldirishi mumkin."
+    },
+    "lawyer": {
+        "name": "📜 Advokat",
+        "team": "mafia",
+        "description": "Mafiya a'zosini tanlaydi va uni kunduzgi ovoz berishda osilishdan himoya qiladi."
+    },
+    "spy": {
+        "name": "🕵️‍♂️ Xufyona ayg'oqchi",
+        "team": "mafia",
+        "description": "Har kecha bir o'yinchining aniq rolini bilib oladi."
+    },
+    "terrorist": {
+        "name": "💣 Terrorchi",
+        "team": "mafia",
+        "description": "Kunduzi osilganda yoki tunda o'ldirilganda o'ziga qo'shib boshqa bir o'yinchini ham olib ketadi."
+    },
+    "mafia_doc": {
+        "name": "👨‍⚕️ Mafiya Shifokori",
+        "team": "mafia",
+        "description": "Faqat Mafiya a'zolarini davolay oladigan xususiy tabib."
+    },
+    "chameleon": {
+        "name": "🎭 Niqobchi",
+        "team": "mafia",
+        "description": "Komissar tekshirganda har safar har xil rol bo'lib ko'rinadi."
+    },
+    "moter": {
+        "name": "🔇 Ovozsizlantiruvchi",
+        "team": "mafia",
+        "description": "Tanlangan o'yinchining ertangi kuni guruhda yozishiga taqiq qo'yadi."
+    },
+
+    # 🟢 TINCH AHOLI VA EZGULIK JAMOASI
+    "civilian": {
+        "name": "🏡 Tinch aholi",
+        "team": "civilian",
+        "description": "Kunduzi muhokama qiladi va ovoz beradi."
+    },
+    "doctor": {
+        "name": "🩺 Shifokor",
+        "team": "civilian",
+        "description": "Har kecha bir kishini davolaydi va o'limdan qutqaradi."
+    },
+    "commissar": {
+        "name": "🕵️ Komissar",
+        "team": "civilian",
+        "description": "Har kecha bir o'yinchining mafiya yoki tinch ekanligini tekshiradi."
+    },
+    "bodyguard": {
+        "name": "🛡️ Tansoqchi",
+        "team": "civilian",
+        "description": "Har kecha bir kishini o'z jonini xatarga qo'yib himoya qiladi."
+    },
+    "sergeant": {
+        "name": "🏹 Oltin O'q",
+        "team": "civilian",
+        "description": "Komissar o'lgandan keyin uning o'rniga o'tadi."
+    },
+    "wizard": {
+        "name": "🔮 Baqshi",
+        "team": "civilian",
+        "description": "Har kecha o'yinchining aniq rolini bilishi mumkin."
+    },
+    "judge": {
+        "name": "⚖️ Qozikalon",
+        "team": "civilian",
+        "description": "Kunduzgi ovoz berish natijasini bir martalikka bekor qilish huquqiga ega."
+    },
+    "enchanter": {
+        "name": "🧙‍♂️ Afsunxona egasi",
+        "team": "civilian",
+        "description": "Tunda tanlangan kishiga 1 kechalik o'limga chidamlilik qalqoni beradi."
+    },
+    "journalist": {
+        "name": "📝 Jurnalist",
+        "team": "civilian",
+        "description": "Har kecha ikki o'yinchini tanlaydi va ularning bir jamoadami yoki yo'qligini aniqlaydi."
+    },
+    "guest": {
+        "name": "🛌 Tungi mehmon",
+        "team": "civilian",
+        "description": "Tunda kimningdir uyida tunaydi va unga qilingan hujumlardan omon qoladi."
+    },
+    "politician": {
+        "name": "📢 Tashviqotchi",
+        "team": "civilian",
+        "description": "Ovoz berishda uning 1 ta ovozi 2 ta ovoz o'rniga o'tadi."
+    },
+    "saint": {
+        "name": "🕯️ Avliyo",
+        "team": "civilian",
+        "description": "Agar kunduzi noto'g'ri osib o'ldirilsa, uni osganlar ertasi kuni ovoz bera olmaydi."
+    },
+    "engineer": {
+        "name": "🛠️ Muhandis",
+        "team": "civilian",
+        "description": "Kechasi shifokor va tansoqchi qobiliyatidan xabardor bo'lib turadi."
+    },
+    "detective": {
+        "name": "🧩 Detektiv",
+        "team": "civilian",
+        "description": "Har kecha kim kimning uyiga borganini kuzatadi."
+    },
+    "chemist": {
+        "name": "💉 Kimyogar",
+        "team": "civilian",
+        "description": "O'yinchini zaharlab, uni keyingi kechada o'ladigan qilib qo'yadi."
+    },
+    "hypnotist": {
+        "name": "🧠 Gipnozchi",
+        "team": "civilian",
+        "description": "O'yinchining tungi maqsadini boshqa tarafga yo'naltirib yuboradi."
+    },
+    "knight": {
+        "name": "🛡️ Ritsar",
+        "team": "civilian",
+        "description": "Faqat bir marta mafiyaning otishidan omon qoladi."
+    },
+    "falcon": {
+        "name": "🦅 Lochin",
+        "team": "civilian",
+        "description": "Tunda qaysi o'yinchi kimga hujum qilganini ko'rib turadi."
+    },
+    "heir": {
+        "name": "📜 Merosxo'r",
+        "team": "civilian",
+        "description": "O'yinda birinchi bo'lib o me'yordan chiqqan yaxshi rolning qobiliyatini o'ziga oladi."
+    },
+    "gatekeeper": {
+        "name": "🔔 Darvoza qorovuli",
+        "team": "civilian",
+        "description": "Tunda qaysi o'yinchilar ko'chaga chiqqanini sezadi."
+    },
+
+    # 🟡 NEUTRAL (YOLG'IZ) JAMOA
+    "maniac": {
+        "name": "🔪 Maniyak",
+        "team": "neutral",
+        "description": "Har kecha xohlagan kishisini o'ldiradi. Maqsadi — yagona g'olib bo'lish."
+    },
+    "joker": {
+        "name": "🤡 Joker",
+        "team": "neutral",
+        "description": "Maqsadi — kunduzgi muhokamada o'zini osishlariga erishish. Osilsa, yutadi."
+    },
+    "zombie": {
+        "name": "🧟 Zombi",
+        "team": "neutral",
+        "description": "Har kecha bir o'yinchini tishlab o'ziga o'xshash zombiga aylantiradi."
+    },
+    "thief": {
+        "name": "🎭 O'g'ri",
+        "team": "neutral",
+        "description": "Har kecha bir o'yinchining rolini vaqtincha o'g'irlab ishlatadi."
+    },
+    "werewolf": {
+        "name": "🐺 Bo'ri",
+        "team": "neutral",
+        "description": "Tinch aholi kabi yuradi, lekin har 2-kechada yirtqichga aylanadi."
+    },
+    "anarchist": {
+        "name": "👑 Anarxist",
+        "team": "neutral",
+        "description": "Tunda ikkita o'yinchini bir-biriga bog'lab qo'yadi (biri o'lsa, ikkinchisi ham o'ladi)."
+    },
+    "hitman": {
+        "name": "💰 Yollanma qotil",
+        "team": "neutral",
+        "description": "O'yin boshida berilgan nishonni yo'qotsa, g'olib bo'ladi."
+    },
+    "alien": {
+        "name": "👽 O'zga sayyoralik",
+        "team": "neutral",
+        "description": "Barcha tirik o'yinchilarga belgi qo'ya olsa, yakka g'olib bo'ladi."
+    },
+    "fireman": {
+        "name": "🧯 O't o'chiruvchi",
+        "team": "neutral",
+        "description": "Kerosin sepib chiqadi va bir kechada hammasini yoqib yuborishi mumkin."
+    },
+    "time_traveler": {
+        "name": "⏳ Vaqt Sayyohi",
+        "team": "neutral",
+        "description": "O'yinda halok bo'lgan o'yinchilardan birini tiriltirish imkoniga ega."
+    }
+}
+
+def get_roles_text():
+    """/roles buyrug'i uchun chiroyli matn chiqaruvchi funksiya"""
+    text = "🎭 **O'yin rollari (Jami 40 ta):**\n\n"
+    
+    text += "🔴 **Mafiya va Yomonlar:**\n"
+    for role_id, info in ROLES.items():
+        if info["team"] == "mafia":
+            text += f"{info['name']} — {info['description']}\n"
+            
+    text += "\n🟢 **Tinch aholi va Ezgulik:**\n"
+    for role_id, info in ROLES.items():
+        if info["team"] == "civilian":
+            text += f"{info['name']} — {info['description']}\n"
+            
+    text += "\n🟡 **Nötr va Yolg'izlar:**\n"
+    for role_id, info in ROLES.items():
+        if info["team"] == "neutral":
+            text += f"{info['name']} — {info['description']}\n"
+            
+    return text
