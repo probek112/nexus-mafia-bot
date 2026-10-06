@@ -1291,19 +1291,9 @@ async def cmd_my_role(message: types.Message) -> None:
 
 
 @dp.message(Command("roles"))
-async def cmd_roles(message: types.Message) -> None:
-    await message.answer(
-        "🎭 <b>O'yin rollari</b>\n\n"
-        f"🔪 <b>{ROLE_MAFIA}</b> — har kecha bir o'yinchini nishonga oladi. "
-        "Mafiya soni tinch aholi soniga tenglashsa, mafiya yutadi.\n\n"
-        f"🩺 <b>{ROLE_DOCTOR}</b> — har kecha bir o'yinchini davolaydi; "
-        "nishonlangan o'yinchini qutqarishi mumkin.\n\n"
-        f"🕵️‍♂️ <b>{ROLE_COMMISSIONER}</b> — kechasi bir o'yinchining mafiyaligini tekshiradi. "
-        "Guruh sozlamasida o'chirib qo'yilishi mumkin.\n\n"
-        f"🏘 <b>{ROLE_CITIZEN}</b> — kunduzi muhokama qiladi va ovoz beradi.\n\n"
-        "Kamida 3 o'yinchi kerak. Shifokor har doim bo'ladi; Komissar 4 yoki undan ko'p "
-        "o'yinchida, agar guruh admini uni yoqib qo'ygan bo'lsa, qatnashadi."
-    )
+async def cmd_roles(message: types.Message):
+    await message.answer(get_roles_text(), parse_mode="Markdown")
+
 
 
 @dp.message(Command("help"))
